@@ -12,6 +12,8 @@ Gem::Specification.new do |s|
   s.authors = ['Christian Meier']
   s.email = ['m.kristian@web.de']
 
+  s.license = 'MIT'
+
   s.bindir = "bin"
   s.executables = ['gwt']
 
