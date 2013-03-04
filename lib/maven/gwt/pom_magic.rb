@@ -62,7 +62,7 @@ module Maven
           unless File.exists?( File.join( layout.public_dir, app_name + ".html" ) )
             app_name = 'index'
           end
-          super dir, File.dirname( __FILE__ ), 'GWT_MODULE' => gwt_module, 'APP_NAME' => app_name
+          super dir, File.dirname( __FILE__ ), 'GWT_MODULE' => gwt_module, 'APP_NAME' => app_name, 'GWT_MODULE_NAME' => gwt_module.sub( /.*\./, '' )
         end
       end
 
