@@ -1,0 +1,11 @@
+<module rename-to='Demo'>
+
+  <inherits name='com.google.gwt.user.User'/>
+
+  <inherits name='org.fusesource.restygwt.RestyGWT'/>
+
+  <entry-point class='demo.client.DemoEntryPoint' />
+
+  <stylesheet src='../Demo.css'/>
+
+</module>

@@ -1,0 +1,11 @@
+<module rename-to='<%= application_class_name %>'>
+
+  <collapse-all-properties />
+  
+  <inherits name='<%= base_package.sub /.client/, '' %>.<%= application_class_name %>' />
+
+  <!-- for gwt codeserver -->
+  <add-linker name="xsiframe"/>
+  <set-configuration-property name="devModeRedirectEnabled" value="true"/>  
+  
+</module>

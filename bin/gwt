@@ -1,0 +1,98 @@
+#!/usr/bin/env ruby
+require 'maven/gwt/cli'
+require 'maven/gwt/generator'
+require 'thor'
+
+class GwtCommand < Thor
+  no_tasks do
+    def mvn
+      @mvn ||= Maven::Gwt::Cli.new
+    end
+    
+    def exec( *args )
+      ARGV.clear # clean up in case another script gets executed
+      mvn.exec( args )
+    end
+
+    def maven_args
+      args = ARGV.dup
+      if i = args.index("--")
+        maven_args = args[i..-1]
+      end
+      maven_args ||= []
+      if options[ :pom ]
+        maven_args << '--pom'
+        maven_args << options[ :pom ]
+      end
+      maven_args
+    end
+  end
+
+  desc "[run]", "runs gwt development shell with either rails filesystem layout or with config.ru"
+  method_option :pom, :type => :string, :default => '.gwt-pom.xml', :desc => 'name of pom file which get generated (gwt-run just generates a pom.xml which gets execued by maven)'
+  def server( *args )
+    exec( *( [ 'gwt:run' ] + maven_args ) )
+  end
+
+  desc "[codeserver]", "starts the gwt codeserver on its default port"
+  method_option :pom, :type => :string, :default => '.gwt-pom.xml', :desc => 'name of pom file which get generated (gwt-run just generates a pom.xml which gets execued by maven)'
+  def codeserver(*args)
+    exec( *( [ 'gwt:run-codeserver' ] + maven_args ) )
+  end
+
+  desc "pom", "dump the gwt pom into pom.xml"
+  method_option :force, :type => :boolean, :default => false, :desc => 'force to overwrite pom.xml'
+  def pom(*args)
+    if File.exists?('pom.xml') && !options[:force]
+      warn "abort. pom.xml already exist. use --force to overwrite"
+    else
+      mvn.dump_pom(options[:force])
+    end
+  end
+
+  desc "setup JAVA_PACKAGE [APP_NAME]", 'setup gwt files. if the is no APP_NAME then the last part of the JAVA_PAKAGE will be the gwt_module name. the entry-point class will be in "client" subpackage'
+  def setup( java_package, app_name = nil )
+    gen = Maven::Gwt::Generator.new
+    gen.setup( java_package, app_name )
+  end
+  
+  desc 'clean', "deleted the target directory and cleans up the generated files in public directory"
+  method_option :pom, :type => :string, :default => '.gwt-pom.xml', :desc => 'name of pom file which get generated (gwt-run just generates a pom.xml which gets execued by maven)'
+  def clean
+    exec( *( [ 'clean', 'gwt:clean' ] + maven_args ) )
+  end
+  
+  desc "compiles", "compiles the gwt java code to javascript"
+  method_option :env, :aliases => '-e', :type => :string, :desc => 'development or production'
+  method_option :force, :type => :boolean, :desc => 'force compilation. default: false'
+  method_option :strict, :type => :boolean, :desc => 'strict compile. default: false'
+  method_option :style, :type => :string, :desc => 'javascript style: DETAILED, PRETTY, OBF, OBFUSCATED. default: DETAILED (development), OBF (production)'
+  method_option :log_level, :type => :string, :desc => 'log level: ERROR, WARN, INFO, TRACE, DEBUG, SPAM, or ALL. default: INFO'
+  def compile
+    args = [ 'compile' ]
+    if value = options[:force]
+      args << "-Dgwt.compiler.force=#{value}"
+    end
+    if value = options[:strict]
+      args << "-Dgwt.compiler.strict=#{value}"
+    end
+    if value = options[:style]
+      args << "-Dgwt.style=#{value}"
+    end
+    if value = options[:log_level]
+      args << "-Dgwt.logLevel=#{value}"
+    end
+    if value = options[:env]
+      args << "-P#{value}"
+    end
+p args
+    exec( *( args + maven_args ) )
+  end
+end
+if i = ARGV.index('run')
+  ARGV[i] = 'server'
+end
+unless ARGV[0] =~ /^[a-z]/
+  ARGV.insert(0, 'server')
+end
+GwtCommand.start

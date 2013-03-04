@@ -1,0 +1,11 @@
+<module rename-to='Demo'>
+
+  <collapse-all-properties />
+  
+  <inherits name='demo.Demo' />
+
+  <!-- for gwt codeserver -->
+  <add-linker name="xsiframe"/>
+  <set-configuration-property name="devModeRedirectEnabled" value="true"/>  
+  
+</module>

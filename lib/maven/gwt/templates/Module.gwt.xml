@@ -1,0 +1,24 @@
+<module rename-to='<%= application_class_name %>'>
+
+  <inherits name='com.google.gwt.user.User'/>
+<% if options[:place] -%>
+
+  <inherits name='com.google.gwt.activity.Activity'/>
+  <inherits name='com.google.gwt.place.Place'/>
+<% end -%>
+<% if options[:gin] -%>
+
+  <inherits name='com.google.gwt.inject.Inject'/>
+<% end -%>
+
+  <inherits name='org.fusesource.restygwt.RestyGWT'/>
+<% if options[:gwt_ruby] -%>
+
+  <inherits name='de.mkristian.gwt.RubyGWT'/>
+<% end -%>
+
+  <entry-point class='<%= base_package %>.<%= application_class_name %>EntryPoint' />
+
+  <stylesheet src='../<%= application_name %>.css'/>
+
+</module>
