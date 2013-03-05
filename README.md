@@ -2,7 +2,7 @@
 
 * [![Build Status](https://secure.travis-ci.org/mkristian/gwt-run.png)](http://travis-ci.org/mkristian/gwt-run)
 * [![Dependency Status](https://gemnasium.com/mkristian/gwt-run.png)](https://gemnasium.com/mkristian/gwt-run)
-* [![Code Climate](https://codeclimate.com/badge.png)](https://codeclimate.com/github/mkristian/gwt-run)
+* [![Code Climate](https://codeclimate.com/github/mkristian/gwt-run.png)](https://codeclimate.com/github/mkristian/gwt-run)
 
 
 ## install ##
