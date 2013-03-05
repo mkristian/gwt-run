@@ -34,7 +34,7 @@ class GwtCommand < Thor
     exec( *( [ 'gwt:run' ] + maven_args ) )
   end
 
-  desc "[codeserver]", "starts the gwt codeserver on its default port"
+  desc "codeserver", "starts the gwt codeserver on its default port"
   method_option :pom, :type => :string, :default => '.gwt-pom.xml', :desc => 'name of pom file which get generated (gwt-run just generates a pom.xml which gets execued by maven)'
   def codeserver(*args)
     exec( *( [ 'gwt:run-codeserver' ] + maven_args ) )
